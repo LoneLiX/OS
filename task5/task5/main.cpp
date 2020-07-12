@@ -7,13 +7,12 @@ int need[100][100] = { 0 };
 int request[100] = { 0 };
 //安全性算法所需向量
 int work[100] = { 0 };
-bool finish[100] = { false };
+int finish[100] = { 0 };
 
 int resInUse = 0;//已经定义的资源数量
 int processNum = 0;//已经声明的进程数量
 const int maxRes = 100;//最大定义资源数量
 const int maxProcess = 100;//最大声明进程数量
-int listCount;
 string resName[100];//资源名
 string processName[100];//进程名
 string safeList[100];//安全队列
@@ -127,48 +126,41 @@ bool compareWorkNeed(int needLine[100],int workTemp[100]) {
 	}
 	return true;
 }
-bool checkSafeList(bool finishTemp[100]) {
+bool checkSafeList(int finishTemp[100]) {
 	for (int i = 0; i < processNum; i++) {
-		if (finishTemp[i] == false) {
+		if (finishTemp[i] == 0) {
 			return false;
 		}
 	}
 	return true;
 }
 bool safe(int availableTemp[100],int allocationTemp[100][100], int needTemp[100][100]) {//三个参数为尝试分配后的矩阵情况
-	int needLine[100]; //获取当前进程的need情况
-	listCount = 0;
+	int needLine[100] = { 0 }; //获取当前进程的need情况
+	int listCount = 0;
 	for (int i = 0; i < resInUse; i++) {
 		work[i] = availableTemp[i];//初始化work向量
 	}
 	for (int i = 0; i < processNum; i++) {
-		finish[i] = false;//初始化finish向量
+		finish[i] = 0;//初始化finish向量
 	}
 	for (int i = 0; i < processNum; i++) {//寻找能够完成的进程
 		for (int j = 0; j < resInUse; j++) {
-			needLine[j] = need[i][j];
+			needLine[j] = needTemp[i][j];
 		}
-		if (finish[i] == false&&compareWorkNeed(needLine,work)) {//如果满足finish为false并且need小于work
-			finish[i] = true;//修改finish为true
+		if (finish[i] == 0 && compareWorkNeed(needLine,work)==true) {//如果满足finish为false并且need小于work
+			finish[i] = 1;//修改finish为true
 			for(int j = 0; j<resInUse;j++){
 				work[j] += allocationTemp[i][j];
 			}
 			safeList[listCount] = processName[i];//将已经完成的进程放入安全队列
+			i = -1;//重头开始搜索
 			listCount++;
 		}
 	}
 	if (checkSafeList(finish)) {
-		/*cout << "安全,此次分配成功" << endl;
-		cout << "存在安全序列为：";
-		for (int i = 0; i < processNum; i++) {
-			cout << safeList[i] << " ";
-		}
-		cout << "------------------------------------------" << endl;*/
 		return true;
 	}
 	else {
-		/*cout << "分配失败，不存在安全序列" << endl;
-		cout << "------------------------------------------" << endl;*/
 		return false;
 	}
 }
@@ -228,6 +220,7 @@ bool allocate() {
 		for (int i = 0; i < processNum; i++) {
 			cout << safeList[i] << " ";
 		}
+		cout << endl;
 		cout << "------------------------------------------" << endl;
 		for (int i = 0; i < resInUse; i++) {
 			available[i] = availableTemp[i];
@@ -333,6 +326,8 @@ int main() {
 			break;
 		}
 	}
+	system("pause");
+	return 0;
 }
 	
 

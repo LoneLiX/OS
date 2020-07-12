@@ -2,14 +2,6 @@
 #include<string>
 using namespace std;
 
-/*typedef struct Lnode
-{
-	string p_name = "";//进程名
-	char state = 'R';//状态
-	int priority = 0;//优先级
-	int time = 0;//要求时间
-	struct Lnode* next = NULL;//下一个节点
-}PCBNode;*/
 class PCBNode {
 public:
 	string p_name = "";//进程名
@@ -56,17 +48,18 @@ void printList(PCBNode* pcbList) {
 	if (pcbList->next == NULL)
 		return;
 	PCBNode* p = pcbList->next;
+	PCBNode* show = pcbList->next->next;
 	cout << "正在运行中：" << p->p_name << endl;
 	cout << "就绪队列为:";
-	while (p != NULL)
+	while (show != NULL)
 	{
-		cout << p->p_name;
-		p = p->next;
+		cout << show->p_name;
+		show = show->next;
 	}
 	cout << endl;
 }
 
-void sortList(PCBNode*& pcbList)//排序
+void sortList(PCBNode*& pcbList)//按照优先数排序
 {
 	int len = lenList(pcbList);
 	//cout << "len:" << len << endl;//调试用
@@ -99,7 +92,7 @@ void sortList(PCBNode*& pcbList)//排序
 	}
 }
 
-void Start(PCBNode*& readyList, PCBNode*& endList)
+void Start(PCBNode*& readyList, PCBNode*& endList)//模拟运行
 {
 	while (readyList->next!= NULL) {
 		sortList(readyList);
@@ -121,8 +114,7 @@ void Start(PCBNode*& readyList, PCBNode*& endList)
 			delete(Running);
 
 		}
-		
-		
+
 	}
 }
 

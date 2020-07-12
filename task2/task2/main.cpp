@@ -133,22 +133,18 @@ void release()
 				FreeList* temp = search->prior;
 				if (temp->next->node.state == 0) {
 					temp->node.space += temp->next->node.space;
-					if (temp->next->next == NULL)
-					{
+					if (temp->next->next == NULL){
 						temp->next = search->next->next;
 					}
 					else {
 					temp->next->next->prior = temp;
 					temp->next = temp->next->next;
 					}
-
 				}
 			}
-			else if (search->next->node.state == 0)
-			{
+			else if (search->next->node.state == 0){
 				search->node.space += search->next->node.space;
-				if (search->next->next == NULL)
-				{
+				if (search->next->next == NULL){
 					search->next = search->next->next;
 				}
 				else {

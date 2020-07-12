@@ -1,6 +1,6 @@
 #include<iostream>
 using namespace std;
-int bitMap[8][8];//8*2*4 = 64
+int bitMap[8][8];//λʾͼ 8*2*4 = 64
 class File
 {
 public:
